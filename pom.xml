@@ -37,13 +37,21 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <corbel.version>1.24.0-SNAPSHOT</corbel.version>
+        <lib-ws.version>0.13.0-SNAPSHOT</lib-ws.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.7</version>
+            <groupId>io.corbel</groupId>
+            <artifactId>rem-api</artifactId>
+            <version>${corbel.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.corbel.lib</groupId>
+            <artifactId>ws</artifactId>
+            <version>${lib-ws.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.corbel.lib</groupId>
@@ -51,10 +59,19 @@
             <version>0.3.0</version>
         </dependency>
         <dependency>
-            <groupId>io.corbel</groupId>
-            <artifactId>rem-api</artifactId>
-            <version>${corbel.version}</version>
-            <scope>provided</scope>
+            <groupId>net.rcarz</groupId>
+            <artifactId>jira-client</artifactId>
+            <version>0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.7</version>
         </dependency>
     </dependencies>
 
@@ -191,6 +208,7 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+
     <repositories>
         <repository>
             <id>sonatype</id>
