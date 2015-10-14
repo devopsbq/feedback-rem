@@ -142,7 +142,7 @@
                     <addScmInfo>true</addScmInfo>
                     <connectionType>developerConnection</connectionType>
                     <buildDatePattern>dd/MM/yyyy HH:mm:ss z</buildDatePattern>
-                    <propertiesOutputFile>${project.artifactId}-build.properties</propertiesOutputFile>
+                    <propertiesOutputFile>${project.artifactId}-plugin-build.properties</propertiesOutputFile>
                 </configuration>
                 <executions>
                     <execution>
