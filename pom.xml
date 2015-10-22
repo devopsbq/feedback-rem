@@ -3,7 +3,7 @@
 
     <groupId>io.corbel</groupId>
     <artifactId>feedback-rem</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0-SNAPSHOT</version>
 
     <name>feedback-rem</name>
     <description>Feedback REM</description>
@@ -30,7 +30,7 @@
     <scm>
         <connection>scm:git:ssh://bq-devtools@git.dev.bqsoftware.net:29418/feedback-rem</connection>
         <developerConnection>scm:git:ssh://bq-devtools@git.dev.bqsoftware.net:29418/feedback-rem</developerConnection>
-        <tag>feedback-rem-0.0.1</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
