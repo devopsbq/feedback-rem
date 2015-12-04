@@ -44,7 +44,7 @@ public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
                 String summary = entity.remove("summary").getAsString();
                 String issueType = entity.remove("issueType").getAsString();
                 Issue.FluentCreate issueBuilder = jiraClient.createIssue(project, issueType).field("summary", summary);
-                entity.entrySet().forEach(entry -> issueBuilder.field(entry.getKey(), entry.getValue().getAsString()));
+                entity.entrySet().forEach(entry -> issueBuilder.field(entry.getKey(), entry.getValue()));
                 issueBuilder.execute();
                 return Response.ok().build();
             } catch (JiraException exception) {
