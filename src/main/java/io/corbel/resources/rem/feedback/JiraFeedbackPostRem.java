@@ -4,15 +4,13 @@ import java.net.URI;
 import java.util.Optional;
 
 import javax.ws.rs.core.Response;
-
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.JiraException;
 
+import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.gson.JsonObject;
 
 import io.corbel.lib.ws.api.error.ErrorResponseFactory;
 import io.corbel.resources.rem.BaseRem;
@@ -22,7 +20,7 @@ import io.corbel.resources.rem.request.RequestParameters;
 /**
  * @author Alberto J. Rubio
  */
-public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
+public class JiraFeedbackPostRem extends BaseRem<JSONObject> {
 
     private static final Logger LOG = LoggerFactory.getLogger(JiraFeedbackPostRem.class);
 
@@ -33,18 +31,18 @@ public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
     }
 
     @Override
-    public Response collection(String type, RequestParameters<CollectionParameters> parameters, URI uri, Optional<JsonObject> entity) {
+    public Response collection(String type, RequestParameters<CollectionParameters> parameters, URI uri, Optional<JSONObject> entity) {
         return entity.map(this::createFeedbackIssue).orElse(ErrorResponseFactory.getInstance().badRequest());
     }
 
-    private Response createFeedbackIssue(JsonObject entity) {
+    private Response createFeedbackIssue(JSONObject entity) {
         if (entity.has("project") && entity.has("issueType") && entity.has("summary")) {
             try {
-                String project = entity.remove("project").getAsString();
-                String summary = entity.remove("summary").getAsString();
-                String issueType = entity.remove("issueType").getAsString();
-                Issue.FluentCreate issueBuilder = jiraClient.createIssue(project, issueType).field("summary", summary);
-                entity.entrySet().forEach(entry -> issueBuilder.field(entry.getKey(), entry.getValue()));
+                String project = entity.remove("project").toString();
+                String issueType = entity.remove("issueType").toString();
+                Issue.FluentCreate issueBuilder = jiraClient.createIssue(project, issueType);
+
+                entity.keySet().forEach(key -> issueBuilder.field(key.toString(), entity.get(key)));
                 issueBuilder.execute();
                 return Response.ok().build();
             } catch (JiraException exception) {
@@ -59,7 +57,7 @@ public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
     }
 
     @Override
-    public Class<JsonObject> getType() {
-        return JsonObject.class;
+    public Class<JSONObject> getType() {
+        return JSONObject.class;
     }
 }
