@@ -52,7 +52,7 @@ public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
             } catch (JiraException exception) {
                 String message = "Error creating Jira issue: " + exception.getMessage();
                 if (exception.getCause() != null) {
-                    message += ", cause: " + exception.getMessage();
+                    message += ", cause: " + exception.getCause();
                 }
                 LOG.error(message);
             }
