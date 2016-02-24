@@ -24,28 +24,29 @@ import static org.mockito.Mockito.*;
  */
 public class JiraFeedbackPostRemTest {
 
-    private static final String NAME_ATTACHMENT = "pre.tt.y.bmp";
     private static final String PROJECT = "TES";
     private static final String ISSUE_TYPE = "Bug";
-    private static final String JSON_AS_STRING_WITH_ATTACHMENT = "{'project':'TES','issueType':'Bug','summary':'test summaryWoW','attachment':"+
-            "{'attachmentContent':'Qk2eAAAAAAAAAHoAAABsAAAAAwAAAAMAAAABABgAAAAAACQAAAATCwAAEwsAAAAAAAAAAAAAQkdScw"+
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAD//wD/AP//AAAAA"+
-            "ABmZmYA/wAAAH8AAAAAAP9/AAAA//8AAAA=','attachmentName':'pre.tt.y.bmp'}}";
-    private static final String JSON_AS_STRING_WITH_ATTACHMENT_WITHOUT_ATTACHMENT_CONTENT = "{'project':'TES','issueType':'Bug','summary':'test summaryWoW','attachment':"+
-            "{'attachmentName':'pre.tt.y.bmp'}}";
-    private static final String JSON_AS_STRING_WITH_ATTACHMENT_WITHOUT_ATTACHMENT_NAME = "{'project':'TES','issueType':'Bug','summary':'test summaryWoW','attachment':"+
-            "{'attachmentContent':'Qk2eAAAAAAAAAHoAAABsAAAAAwAAAAMAAAABABgAAAAAACQAAAATCwAAEwsAAAAAAAAAAAAAQkdScw"+
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAD//wD/AP//AAAAA"+
-            "ABmZmYA/wAAAH8AAAAAAP9/AAAA//8AAAA='}}";
-    private static final String JSON_AS_STRING_WITHOUT_ATTACHMENT = "{'project':'TES','issueType':'Bug','summary':'test summaryWoW'}";
-    private static final String JSON_AS_STRING_WITHOUT_ISSUETYPE = "{'project':'TES','summary':'test summaryWoW'}";
-    private static final String JSON_AS_STRING_WITHOUT_SUMMARY = "{'project':'TES','issueType':'Bug'}";
-    private static final String JSON_AS_STRING_WITHOUT_PROJECT = "{'issueType':'Bug','summary':'test summaryWoW'}";
-    private static final String JSON_AS_STRING_WITH_SUMMARY = "{'summary':'test summaryWoW'}";
+    private static final String SUMMARY = "test summaryWoW";
+    private static final String ATTACHMENT_NAME = "pre.tt.y.bmp";
     private static final String CONTENT_STRING = "Qk2eAAAAAAAAAHoAAABsAAAAAwAAAAMAAAABABgAAAAAACQAAAATCwAAEwsAAAAAAAAAAAAAQkdScw"+
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAD//wD/AP//AAAAA"+
             "ABmZmYA/wAAAH8AAAAAAP9/AAAA//8AAAA=";
     private static final String FILE_NAME = "fi.le.name.bmp";
+
+
+    private static final String JSON_AS_STRING_WITH_ATTACHMENT = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "','attachment':"+
+            "{'content':'" + CONTENT_STRING + "', name:'" + ATTACHMENT_NAME + "'}}";
+    private static final String JSON_AS_STRING_WITH_ATTACHMENT_WITHOUT_ATTACHMENT_CONTENT = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "','attachment':"+
+            "{'name':'" + ATTACHMENT_NAME + "'}}";
+    private static final String JSON_AS_STRING_WITH_ATTACHMENT_WITHOUT_ATTACHMENT_NAME = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "','attachment':"+
+            "{'content':'" + CONTENT_STRING + "'}}";
+    private static final String JSON_AS_STRING_WITHOUT_ATTACHMENT = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "'}";
+    private static final String JSON_AS_STRING_WITHOUT_ISSUETYPE = "{'project':'" + PROJECT + "','summary':'" + SUMMARY + "'}";
+    private static final String JSON_AS_STRING_WITHOUT_SUMMARY = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "'}";
+    private static final String JSON_AS_STRING_WITHOUT_PROJECT = "{'issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "'}";
+    private static final String JSON_AS_STRING_WITH_SUMMARY = "{'summary':'" + SUMMARY + "'}";
+
+
     private byte[] content;
     private JiraFeedbackPostRem jiraFeedbackPostRem;
     private JiraFeedbackPostRem jiraFeedbackPostRemException;
@@ -88,7 +89,7 @@ public class JiraFeedbackPostRemTest {
         jiraFeedbackPostRem = Mockito.spy(new JiraFeedbackPostRem(jiraClient));
         jiraFeedbackPostRemFile = Mockito.spy(new JiraFeedbackPostRem(jiraClient));
         doReturn(issue).when(jiraFeedbackPostRem).createIssue(any(JSONObject.class),any(String.class),any(String.class));
-        doReturn(file).when(jiraFeedbackPostRem).getFileFromImage64(any(),any());
+        doReturn(file).when(jiraFeedbackPostRem).getFileFromContent(any(),any());
         content = Base64.decodeBase64(CONTENT_STRING);
     }
 
@@ -109,10 +110,10 @@ public class JiraFeedbackPostRemTest {
         jiraFeedbackPostRemException = Mockito.spy(new JiraFeedbackPostRem(jiraClient));
         fileException = mock(File.class);
 
-        doThrow(new JiraException(NAME_ATTACHMENT)).when(issueWithException).addAttachment(any());
+        doThrow(new JiraException(ATTACHMENT_NAME)).when(issueWithException).addAttachment(any());
         doReturn(issueWithException).when(jiraFeedbackPostRemException).createIssue(any(JSONObject.class),any(String.class),any(String.class));
-        doReturn(file).when(jiraFeedbackPostRem).getFileFromImage64(any(),any());
-        doReturn(fileException).when(jiraFeedbackPostRemException).getFileFromImage64(any(),any());
+        doReturn(file).when(jiraFeedbackPostRem).getFileFromContent(any(),any());
+        doReturn(fileException).when(jiraFeedbackPostRemException).getFileFromContent(any(),any());
 
         jSONObject = JSONObject.fromObject(JSON_AS_STRING_WITH_SUMMARY.toString());
         Response feedbackIssue = jiraFeedbackPostRemException.collection(null, null, null, jsonObjectWithAttachmentOptional);
@@ -187,20 +188,20 @@ public class JiraFeedbackPostRemTest {
     }
 
     @Test
-    public void getFileFromImage64() throws Exception {
-        File file = jiraFeedbackPostRemFile.getFileFromImage64(content,FILE_NAME);
+    public void getFileFromContent() throws Exception {
+        File file = jiraFeedbackPostRemFile.getFileFromContent(content,FILE_NAME);
         assertEquals(file.getName(), FILE_NAME);
     }
 
     @Test
-    public void getFileFromImage64ErrorName() throws Exception {
-        File file = jiraFeedbackPostRemFile.getFileFromImage64(content,null);
+    public void getFileFromContentErrorName() throws Exception {
+        File file = jiraFeedbackPostRemFile.getFileFromContent(content,null);
         assertEquals(file.getName(), "null");
     }
 
     @Test
-    public void getFileFromImage64ErrorContent() throws Exception {
-        File file = jiraFeedbackPostRemFile.getFileFromImage64(null,FILE_NAME);
+    public void getFileFromContentErrorContent() throws Exception {
+        File file = jiraFeedbackPostRemFile.getFileFromContent(null,FILE_NAME);
         assertEquals(file.length(), 0);
     }
 }

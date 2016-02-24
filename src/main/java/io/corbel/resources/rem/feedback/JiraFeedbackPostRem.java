@@ -69,9 +69,9 @@ public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
         AttachmentPreparation attachmentPreparation = null;
         if(jsonObject.has("attachment")) {
             JSONObject jsonAttachment = jsonObject.getJSONObject("attachment");
-            if((jsonAttachment != null) && jsonAttachment.has("attachmentName") && jsonAttachment.has("attachmentContent")) {
-                attachmentPreparation = new AttachmentPreparation(jsonAttachment.remove("attachmentName").toString(),
-                        Base64.decodeBase64(jsonAttachment.remove("attachmentContent").toString()));
+            if((jsonAttachment != null) && jsonAttachment.has("name") && jsonAttachment.has("content")) {
+                attachmentPreparation = new AttachmentPreparation(jsonAttachment.remove("name").toString(),
+                        Base64.decodeBase64(jsonAttachment.remove("content").toString()));
             }
             jsonObject.remove("attachment");
         }
@@ -86,7 +86,7 @@ public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
 
     private void sendAttachmentIfExist(Issue issue, AttachmentPreparation attachmentPreparation) throws JiraException {
         if (attachmentPreparation == null) return;
-        File attachment = getFileFromImage64(attachmentPreparation.getAttachmentContent(), attachmentPreparation.getAttachmentName());
+        File attachment = getFileFromContent(attachmentPreparation.getContent(), attachmentPreparation.getName());
         try{
             issue.addAttachment(attachment); //ToDo when jira-client 0.6 releases, we should use NewAttachment(String filename, byte[] content)
         } finally {
@@ -94,7 +94,7 @@ public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
         }
     }
     //protected for testing purposes
-    protected File getFileFromImage64 (byte[] content, String name) {
+    protected File getFileFromContent (byte[] content, String name) {
         File file = null;
         BufferedOutputStream writer = null;
         try {
