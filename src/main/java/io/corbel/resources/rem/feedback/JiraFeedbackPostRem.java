@@ -7,6 +7,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.ws.rs.core.Response;
@@ -17,6 +19,7 @@ import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.JiraException;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -50,9 +53,9 @@ public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
         JSONObject jsonObject = JSONObject.fromObject(entity.toString());
         if (jsonObject.has("project") && jsonObject.has("issueType") && jsonObject.has("summary")) {
             try {
-                AttachmentPreparation attachmentPreparation = getAttachment(jsonObject);
+                List<AttachmentPreparation> attachmentPreparations = getAttachments(jsonObject);
                 Issue issue = createIssue(jsonObject, jsonObject.remove("project").toString(), jsonObject.remove("issueType").toString());
-                sendAttachmentIfExist(issue,attachmentPreparation);
+                sendAttachmentsIfExist(issue,attachmentPreparations);
                 return Response.ok().build();
             } catch (JiraException exception) {
                 String message = "Error creating Jira issue: " + exception.getMessage();
@@ -65,17 +68,24 @@ public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
         return ErrorResponseFactory.getInstance().badRequest();
     }
 
-    private AttachmentPreparation getAttachment(JSONObject jsonObject){
-        AttachmentPreparation attachmentPreparation = null;
-        if(jsonObject.has("attachment")) {
-            JSONObject jsonAttachment = jsonObject.getJSONObject("attachment");
-            if((jsonAttachment != null) && jsonAttachment.has("name") && jsonAttachment.has("content")) {
-                attachmentPreparation = new AttachmentPreparation(jsonAttachment.remove("name").toString(),
-                        Base64.decodeBase64(jsonAttachment.remove("content").toString()));
+    private List<AttachmentPreparation> getAttachments(JSONObject jsonObject){
+        List<AttachmentPreparation> attachmentPreparations = null;
+        if(jsonObject.has("attachments")) {
+            JSONArray jsonAttachments = jsonObject.getJSONArray("attachments");
+            if (jsonAttachments.isEmpty()){
+                return null;
             }
-            jsonObject.remove("attachment");
+            attachmentPreparations = new ArrayList<>();
+            for (int i = 0; i < jsonAttachments.size(); i++){
+                JSONObject jsonAttachment = jsonAttachments.getJSONObject(i);
+                if((jsonAttachment != null) && jsonAttachment.has("name") && jsonAttachment.has("content")) {
+                    attachmentPreparations.add(new AttachmentPreparation(jsonAttachment.remove("name").toString(),
+                            Base64.decodeBase64(jsonAttachment.remove("content").toString())));
+                }
+            }
+            jsonObject.remove("attachments");
         }
-        return attachmentPreparation;
+        return attachmentPreparations;
     }
     //protected for testing purposes
     protected Issue createIssue(JSONObject jsonObject, String project, String issueType) throws JiraException {
@@ -84,15 +94,18 @@ public class JiraFeedbackPostRem extends BaseRem<JsonObject> {
         return issueBuilder.execute();
     }
 
-    private void sendAttachmentIfExist(Issue issue, AttachmentPreparation attachmentPreparation) throws JiraException {
-        if (attachmentPreparation == null) return;
-        File attachment = getFileFromContent(attachmentPreparation.getContent(), attachmentPreparation.getName());
-        try{
-            issue.addAttachment(attachment); //ToDo when jira-client 0.6 releases, we should use NewAttachment(String filename, byte[] content)
-        } finally {
-            attachment.delete();
+    private void sendAttachmentsIfExist(Issue issue, List<AttachmentPreparation> attachmentPreparations) throws JiraException {
+        if (attachmentPreparations == null || attachmentPreparations.isEmpty()) return;
+        for (AttachmentPreparation attachmentPreparation : attachmentPreparations){
+            File attachment = getFileFromContent(attachmentPreparation.getContent(), attachmentPreparation.getName());
+            try{
+                issue.addAttachment(attachment); //ToDo when jira-client 0.6 releases, we should use NewAttachment(String filename, byte[] content)
+            } finally {
+                attachment.delete();
+            }
         }
     }
+
     //protected for testing purposes
     protected File getFileFromContent (byte[] content, String name) {
         File file = null;

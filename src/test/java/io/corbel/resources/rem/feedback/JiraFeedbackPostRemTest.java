@@ -34,12 +34,14 @@ public class JiraFeedbackPostRemTest {
     private static final String FILE_NAME = "fi.le.name.bmp";
 
 
-    private static final String JSON_AS_STRING_WITH_ATTACHMENT = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "','attachment':"+
-            "{'content':'" + CONTENT_STRING + "', name:'" + ATTACHMENT_NAME + "'}}";
-    private static final String JSON_AS_STRING_WITH_ATTACHMENT_WITHOUT_ATTACHMENT_CONTENT = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "','attachment':"+
-            "{'name':'" + ATTACHMENT_NAME + "'}}";
-    private static final String JSON_AS_STRING_WITH_ATTACHMENT_WITHOUT_ATTACHMENT_NAME = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "','attachment':"+
-            "{'content':'" + CONTENT_STRING + "'}}";
+    private static final String JSON_AS_STRING_WITH_ATTACHMENT = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "','attachments':"+
+            "[{'content':'" + CONTENT_STRING + "', name:'" + ATTACHMENT_NAME + "'}]}";
+    private static final String JSON_AS_STRING_WITH_ATTACHMENTS = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "','attachments':"+
+            "[{'content':'" + CONTENT_STRING + "', name:'" + ATTACHMENT_NAME + "1'},{'content':'\" + CONTENT_STRING + \"', name:'\" + ATTACHMENT_NAME + \"2'}]}";
+    private static final String JSON_AS_STRING_WITH_ATTACHMENT_WITHOUT_ATTACHMENT_CONTENT = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "','attachments':"+
+            "[{'name':'" + ATTACHMENT_NAME + "'}]}";
+    private static final String JSON_AS_STRING_WITH_ATTACHMENT_WITHOUT_ATTACHMENT_NAME = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "','attachments':"+
+            "[{'content':'" + CONTENT_STRING + "'}]}";
     private static final String JSON_AS_STRING_WITHOUT_ATTACHMENT = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "','summary':'" + SUMMARY + "'}";
     private static final String JSON_AS_STRING_WITHOUT_ISSUETYPE = "{'project':'" + PROJECT + "','summary':'" + SUMMARY + "'}";
     private static final String JSON_AS_STRING_WITHOUT_SUMMARY = "{'project':'" + PROJECT + "','issueType':'" + ISSUE_TYPE + "'}";
@@ -52,6 +54,7 @@ public class JiraFeedbackPostRemTest {
     private JiraFeedbackPostRem jiraFeedbackPostRemException;
     private JiraFeedbackPostRem jiraFeedbackPostRemFile;
     private JsonObject jsonObjectWithAttachment;
+    private JsonObject jsonObjectWithAttachments;
     private JsonObject jsonObjectWithAttachmentButWithoutAttachmentContent;
     private JsonObject jsonObjectWithAttachmentButWithoutAttachmentName;
     private JsonObject jsonObjectWithoutAttachment;
@@ -65,6 +68,7 @@ public class JiraFeedbackPostRemTest {
     private File file;
     private File fileException;
     private Optional jsonObjectWithAttachmentOptional;
+    private Optional jsonObjectWithAttachmentsOptional;
     private Optional jsonObjectWithAttachmentButWithoutAttachmentContentOptional;
     private Optional jsonObjectWithAttachmentButWithoutAttachmentNameOptional;
     private Optional jsonObjectWithoutAttachmentOptional;
@@ -76,6 +80,7 @@ public class JiraFeedbackPostRemTest {
     public void setUp() throws Exception {
         jiraClient = mock(JiraClient.class);
         jsonObjectWithAttachment = new JsonParser().parse(JSON_AS_STRING_WITH_ATTACHMENT).getAsJsonObject();
+        jsonObjectWithAttachments = new JsonParser().parse(JSON_AS_STRING_WITH_ATTACHMENTS).getAsJsonObject();
         jsonObjectWithAttachmentButWithoutAttachmentContent = new JsonParser().parse(JSON_AS_STRING_WITH_ATTACHMENT_WITHOUT_ATTACHMENT_CONTENT).getAsJsonObject();
         jsonObjectWithAttachmentButWithoutAttachmentName = new JsonParser().parse(JSON_AS_STRING_WITH_ATTACHMENT_WITHOUT_ATTACHMENT_NAME).getAsJsonObject();
         jsonObjectWithoutAttachment = new JsonParser().parse(JSON_AS_STRING_WITHOUT_ATTACHMENT).getAsJsonObject();
@@ -95,6 +100,7 @@ public class JiraFeedbackPostRemTest {
 
     private void fillOptionals() {
         jsonObjectWithAttachmentOptional = Optional.of( jsonObjectWithAttachment );
+        jsonObjectWithAttachmentsOptional = Optional.of( jsonObjectWithAttachments );
         jsonObjectWithAttachmentButWithoutAttachmentContentOptional = Optional.of( jsonObjectWithAttachmentButWithoutAttachmentContent );
         jsonObjectWithAttachmentButWithoutAttachmentNameOptional = Optional.of( jsonObjectWithAttachmentButWithoutAttachmentName );
         jsonObjectWithoutAttachmentOptional = Optional.of( jsonObjectWithoutAttachment );
@@ -131,6 +137,15 @@ public class JiraFeedbackPostRemTest {
         assertEquals(feedbackIssue.getStatus(), 200);
         verify(jiraFeedbackPostRem).createIssue(eq(jSONObject),eq(PROJECT),eq(ISSUE_TYPE));
         verify(issue).addAttachment(file);
+    }
+
+    @Test
+    public void testCollectionWithAttachments() throws Exception {
+        jSONObject = JSONObject.fromObject(JSON_AS_STRING_WITH_SUMMARY.toString());
+        Response feedbackIssue = jiraFeedbackPostRem.collection(null, null, null, jsonObjectWithAttachmentsOptional);
+        assertEquals(feedbackIssue.getStatus(), 200);
+        verify(jiraFeedbackPostRem).createIssue(eq(jSONObject),eq(PROJECT),eq(ISSUE_TYPE));
+        verify(issue, times(2)).addAttachment(file);
     }
 
     @Test
