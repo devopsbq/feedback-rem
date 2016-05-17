@@ -1,13 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>io.corbel</groupId>
+  <groupId>com.bq.corbel</groupId>
   <artifactId>feedback-rem</artifactId>
   <version>0.8.0-SNAPSHOT</version>
 
   <name>feedback-rem</name>
   <description>Feedback REM</description>
-  <url>https://github.com/corbel-platform/feedback-rem</url>
+  <url>https://github.com/bq/feedback-rem</url>
 
   <licenses>
     <license>
@@ -23,38 +23,38 @@
   </organization>
 
   <issueManagement>
-    <url>https://github.com/corbel-platform/feedback-rem/issues</url>
+    <url>https://github.com/bq/feedback-rem/issues</url>
     <system>GitHub Issues</system>
   </issueManagement>
 
   <scm>
     <connection>scm:git:ssh://bq-devtools@git.dev.bqsoftware.net:29418/feedback-rem</connection>
     <developerConnection>scm:git:ssh://bq-devtools@git.dev.bqsoftware.net:29418/feedback-rem</developerConnection>
-    <url>https://github.com/corbel-platform/feedback-rem</url>
+    <url>https://github.com/bq/feedback-rem</url>
     <tag>HEAD</tag>
   </scm>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <corbel.version>1.27.0</corbel.version>
-    <lib-ws.version>0.16.0</lib-ws.version>
+    <corbel.version>1.32.0-SNAPSHOT</corbel.version>
+    <lib-ws.version>0.21.0-SNAPSHOT</lib-ws.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>io.corbel</groupId>
+      <groupId>com.bq.corbel</groupId>
       <artifactId>rem-api</artifactId>
       <version>${corbel.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>io.corbel.lib</groupId>
+      <groupId>com.bq.corbel.lib</groupId>
       <artifactId>ws</artifactId>
       <version>${lib-ws.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>io.corbel.lib</groupId>
+      <groupId>com.bq.corbel.lib</groupId>
       <artifactId>config</artifactId>
       <version>0.3.0</version>
     </dependency>

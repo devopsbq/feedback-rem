@@ -1,4 +1,4 @@
-package io.corbel.resources.rem.feedback.ioc;
+package com.bq.corbel.resources.rem.feedback.ioc;
 
 import net.rcarz.jiraclient.BasicCredentials;
 import net.rcarz.jiraclient.JiraClient;
@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
-import io.corbel.lib.config.ConfigurationIoC;
-import io.corbel.resources.rem.Rem;
-import io.corbel.resources.rem.feedback.JiraFeedbackPostRem;
+import com.bq.corbel.lib.config.ConfigurationIoC;
+import com.bq.corbel.resources.rem.Rem;
+import com.bq.corbel.resources.rem.feedback.JiraFeedbackPostRem;
 
 /**
  * @author Alberto J. Rubio

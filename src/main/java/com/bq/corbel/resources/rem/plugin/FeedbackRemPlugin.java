@@ -1,6 +1,6 @@
-package io.corbel.resources.rem.plugin;
+package com.bq.corbel.resources.rem.plugin;
 
-import io.corbel.resources.rem.Rem;
+import com.bq.corbel.resources.rem.Rem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -8,9 +8,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
-import io.corbel.lib.config.ConfigurationHelper;
-import io.corbel.resources.rem.RemRegistry;
-import io.corbel.resources.rem.feedback.ioc.FeedbackRemIoc;
+import com.bq.corbel.lib.config.ConfigurationHelper;
+import com.bq.corbel.resources.rem.RemRegistry;
+import com.bq.corbel.resources.rem.feedback.ioc.FeedbackRemIoc;
 
 /**
  * @author Alberto J. Rubio

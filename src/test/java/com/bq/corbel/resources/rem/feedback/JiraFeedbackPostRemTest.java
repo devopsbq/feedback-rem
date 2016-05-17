@@ -1,8 +1,8 @@
-package io.corbel.resources.rem.feedback;
+package com.bq.corbel.resources.rem.feedback;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.corbel.resources.rem.feedback.model.AttachmentPreparation;
+import com.bq.corbel.resources.rem.feedback.model.AttachmentPreparation;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.JiraException;

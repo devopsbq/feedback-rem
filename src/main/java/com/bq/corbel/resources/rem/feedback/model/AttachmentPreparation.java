@@ -1,4 +1,4 @@
-package io.corbel.resources.rem.feedback.model;
+package com.bq.corbel.resources.rem.feedback.model;
 
 /**
  * @author Samuel Martin

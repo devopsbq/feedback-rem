@@ -1,4 +1,4 @@
-package io.corbel.resources.rem.feedback;
+package com.bq.corbel.resources.rem.feedback;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +14,7 @@ import java.util.Optional;
 import javax.ws.rs.core.Response;
 
 import com.google.gson.JsonObject;
-import io.corbel.resources.rem.feedback.model.AttachmentPreparation;
+import com.bq.corbel.resources.rem.feedback.model.AttachmentPreparation;
 import net.rcarz.jiraclient.Issue;
 import net.rcarz.jiraclient.JiraClient;
 import net.rcarz.jiraclient.JiraException;
@@ -25,10 +25,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.corbel.lib.ws.api.error.ErrorResponseFactory;
-import io.corbel.resources.rem.BaseRem;
-import io.corbel.resources.rem.request.CollectionParameters;
-import io.corbel.resources.rem.request.RequestParameters;
+import com.bq.corbel.lib.ws.api.error.ErrorResponseFactory;
+import com.bq.corbel.resources.rem.BaseRem;
+import com.bq.corbel.resources.rem.request.CollectionParameters;
+import com.bq.corbel.resources.rem.request.RequestParameters;
 
 /**
  * @author Alberto J. Rubio
