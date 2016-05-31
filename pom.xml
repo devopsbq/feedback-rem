@@ -37,7 +37,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <corbel.version>1.32.0-SNAPSHOT</corbel.version>
-    <lib-ws.version>0.21.0-SNAPSHOT</lib-ws.version>
+    <lib-ws.version>0.22.0-SNAPSHOT</lib-ws.version>
   </properties>
 
   <dependencies>
