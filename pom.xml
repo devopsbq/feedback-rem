@@ -32,6 +32,9 @@
     <corbel.version>1.32.1</corbel.version>
     <lib-ws.version>0.22.1</lib-ws.version>
     <lib-config.version>0.4.1</lib-config.version>
+    <docker.files>${project.basedir}/src/docker</docker.files>
+    <docker.organization>registry.bqws.io/corbel</docker.organization>
+    <docker.name.prefix />
   </properties>
   <dependencies>
     <dependency>
@@ -97,6 +100,50 @@
       </resource>
     </resources>
     <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.7</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/docker</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${docker.files}</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>docker-maven-plugin</artifactId>
+        <version>0.4.10</version>
+        <configuration>
+          <imageName>${docker.organization}/${docker.name.prefix}${project.name}</imageName>
+          <imageTags>
+            <imageTag>${project.version}</imageTag>
+          </imageTags>
+          <forceTags>true</forceTags>
+          <dockerDirectory>${project.build.directory}/docker</dockerDirectory>
+          <resources>
+            <resource>
+              <targetPath>/</targetPath>
+              <directory>${project.build.directory}</directory>
+              <include>${project.name}-${project.version}.jar</include>
+            </resource>
+          </resources>
+          <serverId>bq-registry</serverId>
+          <registryUrl>https://registry.bqws.io</registryUrl>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
