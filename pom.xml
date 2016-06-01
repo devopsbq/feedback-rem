@@ -1,14 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <groupId>com.bq.corbel</groupId>
   <artifactId>feedback-rem</artifactId>
   <version>0.8.0-SNAPSHOT</version>
-
   <name>feedback-rem</name>
   <description>Feedback REM</description>
   <url>https://github.com/bq/feedback-rem</url>
-
   <licenses>
     <license>
       <name>The Apache Software License, Version 2.0</name>
@@ -16,30 +13,25 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
   <organization>
     <name>bq</name>
     <url>http://www.bq.com/</url>
   </organization>
-
   <issueManagement>
     <url>https://github.com/bq/feedback-rem/issues</url>
     <system>GitHub Issues</system>
   </issueManagement>
-
   <scm>
     <connection>scm:git:ssh://bq-devtools@git.dev.bqsoftware.net:29418/feedback-rem</connection>
     <developerConnection>scm:git:ssh://bq-devtools@git.dev.bqsoftware.net:29418/feedback-rem</developerConnection>
     <url>https://github.com/bq/feedback-rem</url>
     <tag>HEAD</tag>
   </scm>
-
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <corbel.version>1.32.0-SNAPSHOT</corbel.version>
+    <corbel.version>1.32.0</corbel.version>
     <lib-ws.version>0.22.0-SNAPSHOT</lib-ws.version>
   </properties>
-
   <dependencies>
     <dependency>
       <groupId>com.bq.corbel</groupId>
@@ -86,7 +78,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
   <build>
     <resources>
       <resource>
@@ -179,7 +170,6 @@
       </plugin>
     </plugins>
   </build>
-
   <profiles>
     <profile>
       <id>release-sign-artifacts</id>
@@ -302,7 +292,6 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
-
   <repositories>
     <repository>
       <id>sonatype</id>
@@ -321,5 +310,4 @@
       </snapshots>
     </repository>
   </repositories>
-
 </project>
