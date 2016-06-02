@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.bq.corbel</groupId>
   <artifactId>feedback-rem</artifactId>
-  <version>0.9.0-SNAPSHOT</version>
+  <version>0.8.1-SNAPSHOT</version>
   <name>feedback-rem</name>
   <description>Feedback REM</description>
   <url>https://github.com/bq/feedback-rem</url>
@@ -29,8 +29,9 @@
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <corbel.version>1.32.0</corbel.version>
-    <lib-ws.version>0.22.0</lib-ws.version>
+    <corbel.version>1.32.1-SNAPSHOT</corbel.version>
+    <lib-ws.version>0.22.1-SNAPSHOT</lib-ws.version>
+    <lib-config.version>0.4.1-SNAPSHOT</lib-config.version>
   </properties>
   <dependencies>
     <dependency>
@@ -48,7 +49,7 @@
     <dependency>
       <groupId>com.bq.corbel.lib</groupId>
       <artifactId>config</artifactId>
-      <version>0.3.0</version>
+      <version>${lib-config.version}</version>
     </dependency>
     <dependency>
       <groupId>net.rcarz</groupId>
